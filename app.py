@@ -1,21 +1,21 @@
-import openai
 import streamlit as st
+from langchain_groq import ChatGroq  # Import ChatGroq from langchain_groq
 from langchain_core.prompts import ChatPromptTemplate
 
-# Load OpenAI API Key from Streamlit secrets or environment variable
-openai_api_key = st.secrets["OPENAI_API_KEY"]  # or use: openai.api_key = "your-api-key"
+# Load GROQ_API_KEY from Streamlit secrets
+groq_api_key = st.secrets["GROQ_API_KEY"]
 
-# Initialize OpenAI API with your key
-openai.api_key = openai_api_key
+# Replace 'verified-model-name' with the actual name of a valid Groq model
+llm = ChatGroq(groq_api_key=groq_api_key, model="Gemma2-9b-It")
 
-# Prompt Template for Translation
+# Prompt Template
 generic_template = "Translate the following into {language}:"
 prompt = ChatPromptTemplate.from_messages(
     [("system", generic_template), ("user", "{text}")]
 )
 
 # Streamlit UI
-st.title("Language Translator with OpenAI GPT")
+st.title("Language Translator with ChatGroq")
 
 # Dropdown for selecting language
 language = st.selectbox(
@@ -32,24 +32,14 @@ if st.button("Translate"):
         st.error("Please enter some text to translate!")
     else:
         try:
-            # Generate the formatted prompt as a string
-            formatted_prompt = prompt.format(language=language, text=text_to_translate)
+            # Generate the formatted prompt as a list of BaseMessages
+            formatted_prompt = prompt.format_messages(language=language, text=text_to_translate)
             
-            # Use OpenAI GPT model to generate a translation
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # You can use "gpt-4" if you have access
-                messages=[
-                    {"role": "system", "content": f"Translate the following into {language}:"},
-                    {"role": "user", "content": text_to_translate}
-                ]
-            )
-            
-            # Extract the model's response
-            translated_text = response['choices'][0]['message']['content']
+            # Use ChatGroq to generate a response
+            response = llm.invoke(formatted_prompt)  # Pass formatted_prompt directly
             
             # Display the translation
             st.success(f"Translation in {language}:")
-            st.write(translated_text)
-        
+            st.write(response)
         except Exception as e:
             st.error(f"An error occurred: {e}")
