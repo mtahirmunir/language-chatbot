@@ -32,11 +32,11 @@ if st.button("Translate"):
         st.error("Please enter some text to translate!")
     else:
         try:
-            # Generate the prompt dynamically
-            generated_prompt = prompt.format_prompt({"language": language, "text": text_to_translate})
+            # Generate the formatted prompt string
+            formatted_prompt = prompt.format(language=language, text=text_to_translate)
             
             # Use ChatGroq to generate a response
-            response = llm.invoke(generated_prompt)  # Pass PromptValue directly
+            response = llm.invoke({"input": formatted_prompt})
             
             # Display the translation
             st.success(f"Translation in {language}:")
