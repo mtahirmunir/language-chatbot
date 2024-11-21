@@ -1,6 +1,7 @@
 import streamlit as st
 from langchain_groq import ChatGroq  # Import ChatGroq from langchain_groq
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser  # Import StrOutputParser
 
 # Load GROQ_API_KEY from Streamlit secrets
 groq_api_key = st.secrets["GROQ_API_KEY"]
@@ -38,8 +39,13 @@ if st.button("Translate"):
             # Use ChatGroq to generate a response
             response = llm.invoke(formatted_prompt)  # Pass formatted_prompt directly
             
-            # Display the translation result
+            # Parse the response using StrOutputParser to extract only the content
+            parser = StrOutputParser()
+            translation = parser.invoke(response['content'])  # Extract only the translation text
+            
+            # Display the translation
             st.success(f"Translation in {language}:")
-            st.write(response)
+            st.write(translation)
+        
         except Exception as e:
             st.error(f"An error occurred: {e}")
