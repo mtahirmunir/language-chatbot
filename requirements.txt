@@ -2,4 +2,4 @@ streamlit
 langchain
 langchain_groq
 langchain_core
-openai
+openai>=1.0.0
