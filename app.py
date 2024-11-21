@@ -18,10 +18,10 @@ prompt = ChatPromptTemplate.from_messages(
 # Streamlit UI
 st.title("Language Translator with ChatGroq")
 
-# Dropdown for selecting language
+# Dropdown for selecting language (Added English and Urdu)
 language = st.selectbox(
     "Select a language to translate into:",
-    ["French", "Spanish", "German", "Chinese", "Italian", "Japanese"]
+    ["French", "Spanish", "German", "Chinese", "Italian", "Japanese", "English", "Urdu"]
 )
 
 # Text input for user text
