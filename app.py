@@ -5,10 +5,10 @@ from langchain_core.prompts import ChatPromptTemplate
 # Load GROQ_API_KEY from Streamlit secrets
 groq_api_key = st.secrets["GROQ_API_KEY"]
 
-# Replace 'verified-model-name' with the actual name of a valid Groq model
+# Initialize the ChatGroq model (replace with your actual Groq model)
 llm = ChatGroq(groq_api_key=groq_api_key, model="Gemma2-9b-It")
 
-# Prompt Template
+# Prompt Template for Translation
 generic_template = "Translate the following into {language}:"
 prompt = ChatPromptTemplate.from_messages(
     [("system", generic_template), ("user", "{text}")]
@@ -38,7 +38,7 @@ if st.button("Translate"):
             # Use ChatGroq to generate a response
             response = llm.invoke(formatted_prompt)  # Pass formatted_prompt directly
             
-            # Display the translation
+            # Display the translation result
             st.success(f"Translation in {language}:")
             st.write(response)
         except Exception as e:
