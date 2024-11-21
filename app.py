@@ -1,21 +1,21 @@
+import openai
 import streamlit as st
-from langchain_groq import ChatGroq  # Import ChatGroq from langchain_groq
 from langchain_core.prompts import ChatPromptTemplate
 
-# Load GROQ_API_KEY from Streamlit secrets
-groq_api_key = st.secrets["GROQ_API_KEY"]
+# Load OpenAI API Key from Streamlit secrets or environment variable
+openai_api_key = st.secrets["OPENAI_API_KEY"]  # or use: openai.api_key = "your-api-key"
 
-# Initialize ChatGroq
-llm = ChatGroq(api_key=groq_api_key, model="groq-translate")  # Replace 'groq-translate' with the actual model name
+# Initialize OpenAI API with your key
+openai.api_key = openai_api_key
 
-# Prompt Template
+# Prompt Template for Translation
 generic_template = "Translate the following into {language}:"
 prompt = ChatPromptTemplate.from_messages(
     [("system", generic_template), ("user", "{text}")]
 )
 
 # Streamlit UI
-st.title("Language Translator with ChatGroq")
+st.title("Language Translator with OpenAI GPT")
 
 # Dropdown for selecting language
 language = st.selectbox(
@@ -32,14 +32,24 @@ if st.button("Translate"):
         st.error("Please enter some text to translate!")
     else:
         try:
-            # Generate the formatted prompt as a list of BaseMessages
-            formatted_prompt = prompt.format_messages(language=language, text=text_to_translate)
+            # Generate the formatted prompt as a string
+            formatted_prompt = prompt.format(language=language, text=text_to_translate)
             
-            # Use ChatGroq to generate a response
-            response = llm.invoke(formatted_prompt)  # Pass formatted_prompt directly
+            # Use OpenAI GPT model to generate a translation
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",  # You can use "gpt-4" if you have access
+                messages=[
+                    {"role": "system", "content": f"Translate the following into {language}:"},
+                    {"role": "user", "content": text_to_translate}
+                ]
+            )
+            
+            # Extract the model's response
+            translated_text = response['choices'][0]['message']['content']
             
             # Display the translation
             st.success(f"Translation in {language}:")
-            st.write(response)
+            st.write(translated_text)
+        
         except Exception as e:
             st.error(f"An error occurred: {e}")
