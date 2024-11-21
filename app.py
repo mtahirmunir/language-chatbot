@@ -33,10 +33,10 @@ if st.button("Translate"):
     else:
         try:
             # Generate the prompt dynamically
-            generated_prompt = prompt.invoke({"language": language, "text": text_to_translate})
+            generated_prompt = prompt.format_prompt({"language": language, "text": text_to_translate})
             
-            # Use ChatGroq to generate a response using `invoke`
-            response = llm.invoke({"input": generated_prompt})
+            # Use ChatGroq to generate a response
+            response = llm.invoke(generated_prompt)  # Pass PromptValue directly
             
             # Display the translation
             st.success(f"Translation in {language}:")
