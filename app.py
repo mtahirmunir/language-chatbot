@@ -39,9 +39,8 @@ if st.button("Translate"):
             # Use ChatGroq to generate a response
             response = llm.invoke(formatted_prompt)  # Pass formatted_prompt directly
             
-            # Parse the response using StrOutputParser to extract only the content
-            parser = StrOutputParser()
-            translation = parser.invoke(response['content'])  # Extract only the translation text
+            # Access the content from the AIMessage object
+            translation = response.content  # Access the 'content' attribute of the AIMessage object
             
             # Display the translation
             st.success(f"Translation in {language}:")
