@@ -1,13 +1,12 @@
-import os
 import streamlit as st
-from langchain_groq import GroqModel  # Import Groq integration for LangChain
+from langchain_groq import ChatGroq  # Import ChatGroq from langchain_groq
 from langchain_core.prompts import ChatPromptTemplate
 
 # Load GROQ_API_KEY from Streamlit secrets
 groq_api_key = st.secrets["GROQ_API_KEY"]
 
-# Initialize the Groq Model
-llm = GroqModel(api_key=groq_api_key, model="groq-translate")  # Replace 'groq-translate' with the actual model name
+# Initialize ChatGroq
+llm = ChatGroq(api_key=groq_api_key, model="groq-translate")  # Replace 'groq-translate' with the actual model name
 
 # Prompt Template
 generic_template = "Translate the following into {language}:"
@@ -16,7 +15,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # Streamlit UI
-st.title("Language Translator with Groq")
+st.title("Language Translator with ChatGroq")
 
 # Dropdown for selecting language
 language = st.selectbox(
@@ -36,7 +35,7 @@ if st.button("Translate"):
             # Generate the prompt dynamically
             generated_prompt = prompt.invoke({"language": language, "text": text_to_translate})
             
-            # Use Groq model to generate a response
+            # Use ChatGroq to generate a response
             response = llm.predict(generated_prompt)
             
             # Display the translation
