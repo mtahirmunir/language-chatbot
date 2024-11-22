@@ -73,8 +73,10 @@ if st.button("Translate"):
             })
             
             # Clear the input text box
-            st.session_state.input_text = ""
-            st.experimental_rerun()  # Rerun the app to refresh the cleared input box
-        
+            st.session_state.input_text = ""  # Clear the input text in session state
+            
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
+# Clear the input box when typing a new query
+st.session_state.input_text = ""
