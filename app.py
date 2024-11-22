@@ -21,8 +21,6 @@ st.title("Language Translator with ChatGroq")
 # Initialize session state for chat history and input field
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-if "input_text" not in st.session_state:
-    st.session_state.input_text = ""
 
 # Display Chat History at the top
 st.subheader("Chat History")
@@ -48,8 +46,7 @@ language = st.selectbox(
 # Text input for user text
 text_to_translate = st.text_input(
     "Enter text to translate:",
-    value=st.session_state.input_text,  # Bind input text to session state
-    on_change=lambda: None  # Ensure no auto-refreshes while typing
+    key="input_text"  # Bind the input to session state
 )
 
 # Translate button
@@ -73,12 +70,8 @@ if st.button("Translate"):
                 "response": translation
             })
             
-            # Clear the input text box
-            st.session_state.input_text = ""  # Clear the input text in session state
+            # Clear the input text box by resetting session state directly
+            st.session_state.input_text = ""  # Reset input field value
             
-            # Force the app to refresh to reflect the cleared input
-            st.experimental_rerun()  # Refresh the UI after updating session state
-        
         except Exception as e:
             st.error(f"An error occurred: {e}")
-
