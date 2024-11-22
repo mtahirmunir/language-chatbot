@@ -18,9 +18,12 @@ prompt = ChatPromptTemplate.from_messages(
 # Streamlit UI
 st.title("Language Translator with ChatGroq")
 
-# Initialize session state for chat history and input field
+# Initialize session state for chat history
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+
+# Create a placeholder for the input text
+input_placeholder = st.empty()  # Placeholder for input text box
 
 # Display Chat History at the top
 st.subheader("Chat History")
@@ -43,10 +46,10 @@ language = st.selectbox(
     key="language"
 )
 
-# Text input for user text
-text_to_translate = st.text_input(
+# Render the input text box inside the placeholder
+text_to_translate = input_placeholder.text_input(
     "Enter text to translate:",
-    key="input_text"  # Bind the input to session state
+    key="input_text"
 )
 
 # Translate button
@@ -70,8 +73,9 @@ if st.button("Translate"):
                 "response": translation
             })
             
-            # Clear the input text box by resetting session state directly
-            st.session_state.input_text = ""  # Reset input field value
+            # Clear the input text box by recreating it
+            input_placeholder.empty()  # Clear the placeholder
+            input_placeholder.text_input("Enter text to translate:", key="input_text")
             
         except Exception as e:
             st.error(f"An error occurred: {e}")
