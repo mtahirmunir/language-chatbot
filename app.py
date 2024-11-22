@@ -18,6 +18,10 @@ prompt = ChatPromptTemplate.from_messages(
 # Streamlit UI
 st.title("Language Translator with ChatGroq")
 
+# Initialize session state for chat history
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
 # Dropdown for selecting language (Added English and Urdu)
 language = st.selectbox(
     "Select a language to translate into:",
@@ -42,9 +46,26 @@ if st.button("Translate"):
             # Access the content from the AIMessage object
             translation = response.content  # Access the 'content' attribute of the AIMessage object
             
+            # Save the user input and translation to chat history
+            st.session_state.chat_history.append({
+                "input": text_to_translate,
+                "language": language,
+                "translation": translation
+            })
+            
             # Display the translation
             st.success(f"Translation in {language}:")
             st.write(translation)
         
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
+# Display Chat History
+if st.session_state.chat_history:
+    st.subheader("Chat History")
+    for i, entry in enumerate(st.session_state.chat_history, 1):
+        st.write(f"**#{i}:**")
+        st.write(f"**Input:** {entry['input']}")
+        st.write(f"**Language:** {entry['language']}")
+        st.write(f"**Translation:** {entry['translation']}")
+        st.markdown("---")
