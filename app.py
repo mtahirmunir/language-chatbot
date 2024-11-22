@@ -25,7 +25,7 @@ language = st.selectbox(
 )
 
 # Text input for user text
-text_to_translate = st.text_input("Enter text to translate:")
+text_to_translate = st.text_input("Enter text to translate:", key="text_input")
 
 # Translate button
 if st.button("Translate"):
@@ -45,6 +45,9 @@ if st.button("Translate"):
             # Display the translation
             st.success(f"Translation in {language}:")
             st.write(translation)
+            
+            # Clear the text input after translation
+            st.session_state.text_input = ""  # Reset the text input field
         
         except Exception as e:
             st.error(f"An error occurred: {e}")
