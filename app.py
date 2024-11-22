@@ -25,7 +25,10 @@ language = st.selectbox(
 )
 
 # Text input for user text
-text_to_translate = st.text_input("Enter text to translate:", key="text_input")
+text_to_translate = st.text_input("Enter text to translate:")
+
+# Variable to hold the translation output
+translation = ""
 
 # Translate button
 if st.button("Translate"):
@@ -45,9 +48,13 @@ if st.button("Translate"):
             # Display the translation
             st.success(f"Translation in {language}:")
             st.write(translation)
-            
-            # Clear the text input after translation
-            st.session_state.text_input = ""  # Reset the text input field
-        
+
+            # Clear the text input by setting the value to an empty string for next use
+            text_to_translate = ""
+
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
+# Display translated text if available
+if translation:
+    st.text_area("Translation Output", translation, height=150)
