@@ -3,6 +3,12 @@ from langchain_groq import ChatGroq  # Import ChatGroq from langchain_groq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser  # Import StrOutputParser
 
+# Set page configuration with title and favicon
+st.set_page_config(
+    page_title="Language Translator",  # Title that appears in the browser tab
+    page_icon="🌍",  # Favicon, can be an emoji or a file path to an image
+)
+
 # Load GROQ_API_KEY from Streamlit secrets
 groq_api_key = st.secrets["GROQ_API_KEY"]
 
@@ -16,7 +22,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # Streamlit UI
-st.title("Language Translator with ChatGroq")
+st.title("Language Translator")
 
 # Dropdown for selecting language (Added English and Urdu)
 language = st.selectbox(
