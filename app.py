@@ -27,7 +27,8 @@ if "input_text" not in st.session_state:
 # Display Chat History at the top
 st.subheader("Chat History")
 if st.session_state.chat_history:
-    for entry in st.session_state.chat_history:
+    # Reverse the chat history to show new messages at the bottom
+    for entry in reversed(st.session_state.chat_history):
         # Display user query
         st.markdown(f"**You:** {entry['query']}")
         # Display AI response
@@ -48,7 +49,7 @@ language = st.selectbox(
 text_to_translate = st.text_input(
     "Enter text to translate:",
     value=st.session_state.input_text,  # Bind input text to session state
-    key="text_to_translate"
+    on_change=lambda: None  # Ensure no auto-refreshes while typing
 )
 
 # Translate button
@@ -75,8 +76,9 @@ if st.button("Translate"):
             # Clear the input text box
             st.session_state.input_text = ""  # Clear the input text in session state
             
+            # Force the app to refresh to reflect the cleared input
+            st.experimental_rerun()  # Refresh the UI after updating session state
+        
         except Exception as e:
             st.error(f"An error occurred: {e}")
 
-# Clear the input box when typing a new query
-st.session_state.input_text = ""
