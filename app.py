@@ -24,8 +24,11 @@ language = st.selectbox(
     ["French", "Spanish", "German", "Chinese", "Italian", "Japanese", "English", "Urdu"]
 )
 
-# Text input for user text
-text_to_translate = st.text_input("Enter text to translate:")
+# Text input for user text with session state
+if "text_to_translate" not in st.session_state:
+    st.session_state.text_to_translate = ""
+
+text_to_translate = st.text_input("Enter text to translate:", value=st.session_state.text_to_translate)
 
 # Variable to hold the translation output
 translation = ""
@@ -49,8 +52,8 @@ if st.button("Translate"):
             st.success(f"Translation in {language}:")
             st.write(translation)
 
-            # Clear the text input by setting the value to an empty string for next use
-            text_to_translate = ""
+            # Clear the text input by resetting session state
+            st.session_state.text_to_translate = ""
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
