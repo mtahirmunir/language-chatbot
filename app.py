@@ -24,10 +24,11 @@ language = st.selectbox(
     ["French", "Spanish", "German", "Chinese", "Italian", "Japanese", "English", "Urdu"]
 )
 
-# Initialize the text input and manage its value using session state
+# Text input for user text with session state management
 if "text_to_translate" not in st.session_state:
-    st.session_state.text_to_translate = ""
+    st.session_state.text_to_translate = ""  # Initialize session state for text input
 
+# Text input for the user, using session state to manage the value
 text_to_translate = st.text_input("Enter text to translate:", value=st.session_state.text_to_translate)
 
 # Variable to hold the translation output
