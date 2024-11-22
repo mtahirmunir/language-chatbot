@@ -46,16 +46,11 @@ if st.button("Translate"):
             # Access the content from the AIMessage object
             translation = response.content  # Access the 'content' attribute of the AIMessage object
             
-            # Save the user input and translation to chat history
+            # Save the user query and translation to chat history
             st.session_state.chat_history.append({
-                "input": text_to_translate,
-                "language": language,
-                "translation": translation
+                "query": text_to_translate,
+                "response": translation
             })
-            
-            # Display the translation
-            st.success(f"Translation in {language}:")
-            st.write(translation)
         
         except Exception as e:
             st.error(f"An error occurred: {e}")
@@ -63,9 +58,9 @@ if st.button("Translate"):
 # Display Chat History
 if st.session_state.chat_history:
     st.subheader("Chat History")
-    for i, entry in enumerate(st.session_state.chat_history, 1):
-        st.write(f"**#{i}:**")
-        st.write(f"**Input:** {entry['input']}")
-        st.write(f"**Language:** {entry['language']}")
-        st.write(f"**Translation:** {entry['translation']}")
-        st.markdown("---")
+    for entry in st.session_state.chat_history:
+        # Display user query
+        st.markdown(f"**You:** {entry['query']}")
+        # Display AI response
+        st.markdown(f"**Translation:** {entry['response']}")
+        st.divider()  # Adds a visual separator between chat entries
