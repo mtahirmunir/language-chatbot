@@ -18,39 +18,14 @@ prompt = ChatPromptTemplate.from_messages(
 # Streamlit UI
 st.title("Language Translator with ChatGroq")
 
-# Initialize session state for chat history and input field
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-if "input_text" not in st.session_state:
-    st.session_state.input_text = ""  # Initialize the input text in session state
-
-# Display Chat History at the top
-st.subheader("Chat History")
-if st.session_state.chat_history:
-    # Reverse the chat history to show new messages at the bottom
-    for entry in reversed(st.session_state.chat_history):
-        # Display user query
-        st.markdown(f"**You:** {entry['query']}")
-        # Display AI response
-        st.markdown(f"**Translation:** {entry['response']}")
-        st.divider()  # Adds a visual separator between chat entries
-else:
-    st.info("Your chat history will appear here.")
-
-# Query input and language selection at the bottom
-st.divider()  # Separator for layout
+# Dropdown for selecting language (Added English and Urdu)
 language = st.selectbox(
     "Select a language to translate into:",
-    ["French", "Spanish", "German", "Chinese", "Italian", "Japanese", "English", "Urdu"],
-    key="language"
+    ["French", "Spanish", "German", "Chinese", "Italian", "Japanese", "English", "Urdu"]
 )
 
 # Text input for user text
-text_to_translate = st.text_input(
-    "Enter text to translate:",
-    value=st.session_state.input_text,  # Bind the input text to session state
-    key="unique_input_text"  # Ensure a unique key for the input widget
-)
+text_to_translate = st.text_input("Enter text to translate:")
 
 # Translate button
 if st.button("Translate"):
@@ -67,14 +42,9 @@ if st.button("Translate"):
             # Access the content from the AIMessage object
             translation = response.content  # Access the 'content' attribute of the AIMessage object
             
-            # Save the user query and translation to chat history
-            st.session_state.chat_history.append({
-                "query": text_to_translate,
-                "response": translation
-            })
-            
-            # Clear the input text box by updating the session state
-            st.session_state.input_text = ""  # Reset the input text in session state
-            
+            # Display the translation
+            st.success(f"Translation in {language}:")
+            st.write(translation)
+        
         except Exception as e:
             st.error(f"An error occurred: {e}")
